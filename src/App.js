@@ -2,36 +2,60 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+const products = [
+  {
+    name: 'Ipad',
+    price: 200
+  },
+  {
+    name: 'iPhone',
+    price: 650
+  }
+];
+
+localStorage.setItem('products', JSON.stringify(products));
 
 class App extends Component {
-  render() {
-    
-    let title = 'This is Haekal\'s App';
-    const item = [
-      'Item 1',
-      'Item 2',
-      'Item 3'
-    ]
+  constructor(props) {
+    super(props);
 
+    this.state = {
+      products: []
+    };
+  }
+
+  componentWillMount() {
+    this.getProducts();
+  }
+
+  getProducts() {
+    const products = JSON.parse(localStorage.getItem('products'));
+    this.setState({ products });
+  }
+
+
+  render() {
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">{title}</h1>
+          <h1 className="App-title">Welcome to React</h1>
         </header>
-        <p className="App-intro">
-          {
-            item.map(item => {
-              return (
-                <div key={item} onMouseEnter={this.onMouseEnter}>
-                  {item}
-                </div>
-              )
-            })
-          }
-          <input onChange={this.onChange}/>
+        <h1>Products Manager</h1>
 
-        </p>
+        {
+          this.state.products.map(product => {
+            return (
+              <div key={product.name}>
+                <span>{product.name}</span> 
+                { ' | ' }
+                <span>{product.price}</span> 
+                { ' | ' }
+                <button>Delete</button>
+              </div>
+            )
+          })
+        }
       </div>
     );
   }

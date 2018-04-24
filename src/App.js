@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import ProductItem from './ProductItem.js'
+import ProductItem from './ProductItem'
+import AddProduct from './AddProduct';
 
 const products = [
   {
@@ -25,6 +26,7 @@ class App extends Component {
       products: JSON.parse(localStorage.getItem('products'))
     };
 
+    this.onAdd = this.onAdd.bind(this);
     this.onDelete = this.onDelete.bind(this);
   }
 
@@ -36,6 +38,16 @@ class App extends Component {
 
   getProducts() {
     return this.state.products;
+  }
+
+  onAdd(name, price) {
+    const products = this.getProducts();
+
+    products.push({
+      name,
+      price
+    });
+    this.setState({ products });
   }
 
   onDelete(name) {
@@ -56,6 +68,10 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Products Manager</h1>
         </header>
+
+        <AddProduct
+          onAdd={this.onAdd}
+        />
 
         {
           this.state.products.map(product => {

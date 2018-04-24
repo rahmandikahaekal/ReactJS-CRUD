@@ -1,2 +1,2 @@
-## Screenshoot
-![Result of Simple CRUD App](01.png)
+## Simple CRUD App Result
+![Result of Simple App](01)

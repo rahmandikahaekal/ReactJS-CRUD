@@ -11,6 +11,9 @@ class AddProduct extends Component {
         event.preventDefault();
 
         this.props.onAdd(this.nameInput.value, this.priceInput.value);
+    
+        this.nameInput.value = '';
+        this.priceInput.value = '';
     }
 
     render() {

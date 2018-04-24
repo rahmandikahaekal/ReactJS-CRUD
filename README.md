@@ -1,2 +1,2 @@
 ## Screenshoot
-![Result of Simple CRUD App](img/01.png)
+![Result of Simple CRUD App](01.png)

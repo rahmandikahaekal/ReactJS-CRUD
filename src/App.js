@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import ProductItem from './ProductItem.js'
+
 const products = [
   {
     name: 'Ipad',
@@ -20,39 +22,49 @@ class App extends Component {
     super(props);
 
     this.state = {
-      products: []
+      products: JSON.parse(localStorage.getItem('products'))
     };
+
+    this.onDelete = this.onDelete.bind(this);
   }
 
   componentWillMount() {
-    this.getProducts();
-  }
+    const products = this.getProducts();
 
-  getProducts() {
-    const products = JSON.parse(localStorage.getItem('products'));
     this.setState({ products });
   }
 
+  getProducts() {
+    return this.state.products;
+  }
+
+  onDelete(name) {
+    const products = this.getProducts();
+
+    const filteredProducts = products.filter(products => {
+      return products.name !== name;
+    });
+
+    this.setState({ products: filteredProducts });
+
+  }
 
   render() {
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">Products Manager</h1>
         </header>
-        <h1>Products Manager</h1>
 
         {
           this.state.products.map(product => {
             return (
-              <div key={product.name}>
-                <span>{product.name}</span> 
-                { ' | ' }
-                <span>{product.price}</span> 
-                { ' | ' }
-                <button>Delete</button>
-              </div>
+              <ProductItem
+                key={product.name}
+                {...product}
+                onDelete = {this.onDelete}
+              />
             )
           })
         }

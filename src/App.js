@@ -1,107 +1,94 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-import ProductItem from './ProductItem'
-import AddProduct from './AddProduct';
-
-const products = [
-  {
-    name: 'Ipad',
-    price: 200
-  },
-  {
-    name: 'iPhone',
-    price: 650
-  }
-];
-
-localStorage.setItem('products', JSON.stringify(products));
-
 class App extends Component {
-  constructor(props) {
+  
+  constructor(props){
     super(props);
-
     this.state = {
-      products: JSON.parse(localStorage.getItem('products'))
-    };
-
-    this.onAdd = this.onAdd.bind(this);
-    this.onDelete = this.onDelete.bind(this);
-    this.onEditSubmit = this.onEditSubmit.bind(this);
+      title: 'React Simple CRUD Application',
+      act: 0,
+      index: '',
+      datas: []
+    }
   }
 
-  componentWillMount() {
-    const products = this.getProducts();
-
-    this.setState({ products });
+  componentDidMount(){
+    this.refs.name.focus();
   }
 
-  getProducts() {
-    return this.state.products;
-  }
+  fSubmit = (e) =>{
+    e.preventDefault();
+    console.log('try');
 
-  onAdd(name, price) {
-    const products = this.getProducts();
+    let datas = this.state.datas;
+    let name = this.refs.name.value;
+    let address = this.refs.address.value;
 
-    products.push({
-      name,
-      price
-    });
-    this.setState({ products });
-  }
-
-  onDelete(name) {
-    const products = this.getProducts();
-
-    const filteredProducts = products.filter(products => {
-      return products.name !== name;
-    });
-
-    this.setState({ products: filteredProducts });
-
-  }
-
-  onEditSubmit(name, price, originalName) {
-    let products = this.getProducts();
-
-    products = products.map(product => {
-      if (product.name === originalName) {
-        product.name = name;
-        product.price = price;
+    if (this.state.act === 0) { //new
+      let data = {
+        name, address
       }
-      return product;
+  
+      datas.push(data); 
+    } else {                    //update
+      let index = this.state.index;
+      datas[index].name = name;
+      datas[index].address = address;
+    }
+
+    this.setState({
+      datas: datas
     });
 
-    this.setState({ products });
-    
+    this.refs.myForm.reset();
+    this.refs.name.focus();
+  }
+
+  fRemove = (i) => {
+    let datas  = this.state.datas;
+    datas.splice(i,1);
+    this.setState({
+      datas:datas
+    });
+
+    this.refs.myForm.reset();
+    this.refs.name.focus();
+  }
+  
+  fEdit = (i) => {
+    let data = this.state.datas[i];
+    this.refs.name.value = data.name;
+    this.refs.address.value = data.address;
+
+    this.setState({
+      act: 1,
+      index: i 
+    })
+
+    this.refs.name.focus();
   }
 
   render() {
+    let datas = this.state.datas;
     return (
-      <form className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Products Manager</h1>
-        </header>
-
-        <AddProduct
-          onAdd={this.onAdd}
-        />
-
-        {
-          this.state.products.map(product => {
-            return (
-              <ProductItem
-                key={product.name}
-                {...product}
-                onDelete = {this.onDelete}
-                onEditSubmit = {this.onEditSubmit}
-              />
-            )
-          })
-        }
-      </form>
+      <div className="App">
+        <h2>{this.state.title}</h2>
+        <form ref="myForm" className="myForm">
+          <input type="text" ref="name" placeholder="your name" className="formField" />
+          <input type="text" ref="address" placeholder="your address" className="formField" />
+          <button onClick={(e)=>this.fSubmit(e)} className="myButton">Submit</button>
+        </form>
+        <pre>
+          {datas.map((data, i) =>
+            <li key={i} className="myList">
+              {i+1}.{data.name}, {data.address}
+              <button onClick={()=>this.fRemove(i)} className="myListButton">Remove</button>
+              <button onClick={()=>this.fEdit(i)} className="myListButton">Edit</button>
+            </li>
+          )}
+        </pre>
+      </div>
     );
   }
 }

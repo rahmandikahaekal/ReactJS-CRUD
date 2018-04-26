@@ -1,5 +1,6 @@
 # Simple CRUD (create, read, update, delete)
 
+![ReactAppCRUD](result_crud.gif)
 ### How to develop :
   - Clone this repo `git clone https://github.com/rahmandikahaekal/ReactJS-CRUD.git`
   - After cloned, you can run the folder react with 
@@ -21,6 +22,3 @@ simple-crud/
     index.css
     index.js
 ```
-
-### Result CRUD App ReactJS
-![ReactAppCRUD](result_crud.gif)
